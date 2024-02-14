@@ -95,7 +95,14 @@ public class GPlanner
                     }
                     else
                     {
-                        currentState.ModifyState(eff.Key, eff.Value);
+                        if(eff.Value == 0)
+                        {
+                            currentState.SetState(eff.Key, eff.Value);
+                        }
+                        else
+                        {
+                            currentState.ModifyState(eff.Key, eff.Value);
+                        }
                     }
                 }
                 GPlanNode node = new GPlanNode(parent, parent.cost + action.GetCost(), currentState, action);
@@ -140,6 +147,6 @@ public class GPlanner
         //    }
 
         //}
-        return goal.IsSatisfiedByWorldState(currentState);
+        return currentState.DoesSatisfyWorldState(goal);
     }
 }

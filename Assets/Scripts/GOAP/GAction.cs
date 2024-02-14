@@ -6,12 +6,9 @@ using UnityEngine.AI;
 
 public abstract class GAction : MonoBehaviour
 {
-    public abstract float GetCost();
-    public abstract string GetName();
-
     [SerializeField] GWorldState[] preConditionsStates;
     [SerializeField] GWorldState[] afterEffectsStates;
-
+    [SerializeField] float baseCost = 1f;
     public NavMeshAgent navAgent;
 
     public GWorldStates preConditions;
@@ -30,6 +27,15 @@ public abstract class GAction : MonoBehaviour
     {
         preConditions = new GWorldStates();
         afterEffects = new GWorldStates();
+    }
+
+    public abstract string GetName();
+    public abstract bool PrePerform();
+    public abstract bool PostPerform();
+
+    public virtual float GetCost()
+    {
+        return baseCost;
     }
 
     private void Awake()
@@ -54,33 +60,36 @@ public abstract class GAction : MonoBehaviour
 
     public bool IsValidGiven(GWorldStates conditions)
     {
-        return preConditions.IsSatisfiedByWorldState(conditions);
+        return conditions.DoesSatisfyWorldState(preConditions);
     }
-
-    public abstract bool PrePerform();
-    public abstract bool PostPerform();
 
     public void StartAction()
     {
         IsRunning = PrePerform();
         this.enabled = IsRunning;
+        navAgent.isStopped = false;
     }
 
-    public void StopAction()
+    public void StopAction(bool interupted = false)
     {
-        if (PostPerform())
+        navAgent.isStopped = true;
+        if (!interupted && PostPerform())
         {
-            foreach (KeyValuePair<EState, int> eff in afterEffects.WorldStates)
-            {
-                gAgentRef.agentBeliefs.ModifyState(eff.Key, eff.Value);
-            }
+            //foreach (KeyValuePair<EState, int> eff in afterEffects.WorldStates)
+            //{
+            //    //gAgentRef.agentBeliefs.ModifyState(eff.Key, eff.Value);
+            //    //if (!gAgentRef.agentBeliefs.DoesSatisfyState(eff.Key, eff.Value))
+            //    //{
+            //    //    Debug.LogWarning($"{gameObject.name} - '{GetName()}' Was Success but state '{eff.Key}' was not updated to '{eff.Value}'");
+            //    //}
+            //}
+            WasSuccess = true;
+        }
+        else
+        {
+            WasSuccess = false;
         }
         this.enabled = false;
         IsRunning = false;
-    }
-
-    public bool ReachedNavDestination()
-    {
-        return !navAgent.pathPending && navAgent.hasPath && navAgent.remainingDistance < 1f;
     }
 }

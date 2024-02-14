@@ -12,6 +12,7 @@ public class GGoal
 
     [SerializeField] List<GWorldState> goalStateList;
 
+
     public GWorldStates goalStates { get; private set; }
 
     public GGoal()
@@ -40,6 +41,7 @@ public class GGoal
 }
 
 [RequireComponent(typeof(NavMeshAgent), typeof(Rigidbody), typeof(GSensor))]
+[RequireComponent(typeof(HealthComponent))]
 public class GAgent : MonoBehaviour
 {
     [SerializeField] List<GAction> actions;
@@ -53,15 +55,9 @@ public class GAgent : MonoBehaviour
     Queue<GAction> actionQueue;
 
     GAction currentAction;
+    HealthComponent healthComponent;
 
     public GSensor sensor { get; private set; }
-    public Memory memory
-    {
-        get
-        {
-            return sensor.memory;
-        }
-    }
 
     int currentGoalIndex;
     public float timeBetweenPlanning = 0.1f;
@@ -140,6 +136,9 @@ public class GAgent : MonoBehaviour
         sensor = GetComponent<GSensor>();
         planner = new GPlanner();
         currentGoalIndex = -1;
+        healthComponent = GetComponent<HealthComponent>();
+        healthComponent.OnDeath += OnDeath;
+        healthComponent.OnDamage += OnDamage;
     }
 
     void Start()
@@ -197,10 +196,24 @@ public class GAgent : MonoBehaviour
             currentAction.StartAction();
             yield return new WaitUntil(() => currentAction.enabled == false);
             if (currentAction.WasSuccess == false)
+            {
+                yield return new WaitForSeconds(1f);
                 break;
+            }
         }
         currentAction = null;
         currentGoalIndex = -1;
+        actionQueue.Clear();
         actionQueue = null;
+    }
+
+    void OnDeath()
+    {
+        Destroy(gameObject);
+    }
+
+    private void OnDamage(float currentHealth, float damage)
+    {
+        // Set Flee State
     }
 }

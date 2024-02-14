@@ -81,23 +81,37 @@ public class GWorldStates
         }
     }
 
-    public bool DoesSatisfyState(EState state, int value)
+    public bool IsSatisfiedByState(EState state, int value)
     {
         bool hasState = this.HasState(state);
         //return !((value > 0 && !hasState) || (value == 0 && hasState && this.GetStateValue(state) > 0));
         return ((hasState && value >= this.GetStateValue(state)) || (!hasState && value == 0));
     }
 
-    public bool IsSatisfiedByWorldState(GWorldStates worldState)
+    public bool DoesSatisfyWorldState(GWorldStates goalStates)
     {
-        foreach (KeyValuePair<EState, int> state in this.WorldStates)
+        foreach (KeyValuePair<EState, int> state in goalStates.WorldStates)
         {
             //bool hasState = conditions.HasState(state.Key);
-            if (!worldState.DoesSatisfyState(state.Key, state.Value))
+            if (!DoesSatisfyState(state.Key, state.Value))
             {
                 return false;
             }
         }
         return true;
     }
+
+    public bool DoesSatisfyState(EState state, int value)
+    {
+        bool hasState = this.HasState(state);
+        if (value == 0)
+        {
+            return !hasState || this.GetStateValue(state) <= 0;
+        }
+        else
+        {
+            return hasState && this.GetStateValue(state) >= value;
+        }
+    }
+
 }

@@ -2,18 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(HealthComponent))]
 public class Tree : MonoBehaviour
 {
     [SerializeField] GameObject woodPrefab;
+    HealthComponent hc;
 
-    public GameObject Interact()
+    private void Awake()
     {
-        Destroy(gameObject);
-        return Instantiate(woodPrefab, transform.position, transform.rotation);
+        hc = GetComponent<HealthComponent>();
+        hc.OnDeath = OnDeath;
     }
 
-    private void OnDestroy()
+    public void OnDeath()
     {
-        
+        Destroy(gameObject);
+        Instantiate(woodPrefab, transform.position, transform.rotation);
     }
 }

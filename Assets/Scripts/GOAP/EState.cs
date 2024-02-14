@@ -4,12 +4,25 @@ using UnityEngine;
 
 public enum EState
 {
-     Idle,
-     Tired,
-     SeenTree,
-     SeesWood,
-     PickedUpWood,
-     BuiltHouse,
+    Idle,
+    Tired,
 
-     SeesPlayer,
+    SeenTree,
+    SeesWood,
+    SeesPlayer,
+    SeesAxe,
+    SeesSword,
+    SeesBow,
+
+    PickedUpWood,
+    BuiltHouse,
+
+    HasSword,
+    HasBow,
+    HasAxe,
+
+    TreeCut,
+
+    PlayerIsClose,
+    KilledPlayer,
 }

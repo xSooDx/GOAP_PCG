@@ -50,7 +50,7 @@ public class WanderAction : GAction
     // Update is called once per frame
     void Update()
     {
-        if(ReachedNavDestination())
+        if(navAgent.ReachedNavDestination(1f))
         {
             StopAction();
         }

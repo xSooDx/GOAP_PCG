@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3704302283570272903}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PickupHolder
   m_TagString: Untagged
   m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 7830299759166296525}
   - component: {fileID: 6679238543077885684}
   - component: {fileID: 8074218960245561923}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,9 +154,10 @@ GameObject:
   - component: {fileID: 6997374285580613464}
   - component: {fileID: 7130337431110003380}
   - component: {fileID: 1112785290808663375}
-  m_Layer: 0
+  - component: {fileID: 2835429536515760654}
+  m_Layer: 6
   m_Name: TestGAgent
-  m_TagString: Untagged
+  m_TagString: Wanderer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -176,7 +177,7 @@ Transform:
   - {fileID: 203009377232012889}
   - {fileID: 3704302283570272903}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!195 &4579886321015110433
 NavMeshAgent:
@@ -239,10 +240,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bed4893199420364292e881741d2a1d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensorRadius: 10
+  TagsToSense:
+  - tag: Tree
+    state: 2
+  - tag: Player
+    state: 6
+  - tag: Wood
+    state: 3
+  sensorRadius: 15
   sensorLayerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 201
   timeBetweenChecks: 0.1
   pickupHolder: {fileID: 3704302283570272903}
 --- !u!114 &6940639886218279705
@@ -264,8 +272,8 @@ MonoBehaviour:
     - key: 2
       value: 1
     goalStateList:
-    - key: 3
-      value: 10
+    - key: 4
+      value: 1
   - goalName: Wander
     goalPreRequisites: []
     goalStateList: []
@@ -291,6 +299,7 @@ MonoBehaviour:
   afterEffectsStates:
   - key: 1
     value: 1
+  baseCost: 1
   navAgent: {fileID: 0}
   target: {fileID: 0}
   targetTag: 
@@ -320,6 +329,7 @@ MonoBehaviour:
   afterEffectsStates:
   - key: 1
     value: -3
+  baseCost: 1
   navAgent: {fileID: 0}
   target: {fileID: 0}
   targetTag: 
@@ -346,6 +356,7 @@ MonoBehaviour:
     value: 1
   - key: 2
     value: 0
+  baseCost: 1
   navAgent: {fileID: 0}
   target: {fileID: 0}
   targetTag: 
@@ -369,11 +380,27 @@ MonoBehaviour:
   afterEffectsStates:
   - key: 4
     value: 1
+  baseCost: 1
   navAgent: {fileID: 0}
   target: {fileID: 0}
   targetTag: 
   gAgentRef: {fileID: 0}
   IsRunning: 0
+--- !u!114 &2835429536515760654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4677862114600255094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 333dfd88d2f4f2c4ba679ff536841dd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingHealth: 20
+  maxHealth: 20
+  currentHealth: 0
 --- !u!1 &5053793098701577429
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,7 +413,7 @@ GameObject:
   - component: {fileID: 7025040168453818142}
   - component: {fileID: 8661564100899965429}
   - component: {fileID: 2827894962950222386}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8485372729414805442}
   - component: {fileID: 5907590363295865832}
   - component: {fileID: 4448643766579670}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 1045351838273816604}
   - component: {fileID: 1096691565708442806}
   - component: {fileID: 4762419988945472117}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -223,7 +223,8 @@ GameObject:
   - component: {fileID: 3498494114895411164}
   - component: {fileID: 2873109247662834648}
   - component: {fileID: 6911690547842050396}
-  m_Layer: 0
+  - component: {fileID: 1602277267160908096}
+  m_Layer: 7
   m_Name: Tree
   m_TagString: Tree
   m_Icon: {fileID: 0}
@@ -245,7 +246,7 @@ Transform:
   - {fileID: 8626267361171851905}
   - {fileID: 5592053792145888112}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &2873109247662834648
 Rigidbody:
@@ -286,4 +287,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 483a03e6b162f9a4d8186575ef2dccfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPickedUp: 0
   woodPrefab: {fileID: 5427793815158858983, guid: cdbca09cb9b976d45953a535a5af4a70, type: 3}
+--- !u!114 &1602277267160908096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8934540787123325725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 333dfd88d2f4f2c4ba679ff536841dd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingHealth: 100
+  maxHealth: 100
+  currentHealth: 0

@@ -19,11 +19,11 @@ public class CutTreeAction : GAction
 
     public override bool PrePerform()
     {
-        target = gAgentRef.memory.objMemory["Tree"];
-        if(target)
-        {
-            t = target.GetComponent<Tree>();
-            if(t)
+        t = null;
+        target = null;
+        if (gAgentRef.sensor.TryGetObjectOfTag("Tree", out target))
+        { 
+            if(target.TryGetComponent<Tree>(out t))
             {
                 navAgent.destination = target.transform.position;
                 return true;
@@ -52,10 +52,17 @@ public class CutTreeAction : GAction
     // Update is called once per frame
     void Update()
     {
-        if(ReachedNavDestination())
+        if(navAgent.ReachedNavDestination(1.5f))
         {
-            wood = t.Interact();
-            StopAction();
+            if (t)
+            {
+                gAgentRef.sensor.UsePickup(t.transform.position);
+                StopAction();
+            }
+            else
+            {
+                StopAction(false);
+            }
         }
     }
 }

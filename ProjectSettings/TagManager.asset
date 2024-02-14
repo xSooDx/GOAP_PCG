@@ -8,15 +8,23 @@ TagManager:
   - Wanderer
   - WoodCutter
   - Wood
+  - WoodCollection
+  - Bow
+  - Sword
+  - Food
+  - Worker
+  - Soldier
+  - Axe
+  - __PickedUp
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
+  - NPC
+  - Item
   - 
   - 
   - 

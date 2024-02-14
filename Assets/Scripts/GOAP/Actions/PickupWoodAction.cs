@@ -21,9 +21,8 @@ public class PickupWoodAction : GAction
 
     public override bool PrePerform()
     {
-        if(gAgentRef.memory.objMemory.ContainsKey("Wood"))
+        if(gAgentRef.sensor.TryGetObjectOfTag("Wood", out target))
         {
-            target = gAgentRef.memory.objMemory["Wood"];
             navAgent.destination = target.transform.position;
             return target;
         }
@@ -32,7 +31,7 @@ public class PickupWoodAction : GAction
 
     private void Update()
     {
-        if(ReachedNavDestination())
+        if(navAgent.ReachedNavDestination(1f))
         {
             Destroy(target.gameObject);
             StopAction();

@@ -1,37 +1,49 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Memory
+[System.Serializable]
+public struct MemData
 {
-    // ToDo: objMemory are linked to states. Need to set and clear memory accordingly
-    public Dictionary<string, GameObject> objMemory;
-
-    public Memory()
-    {
-        objMemory = new Dictionary<string, GameObject>();
-    }
+    public string tag;
+    [TagSelector]
+    public EState state;
 }
+
+
 
 [RequireComponent((typeof(GAgent)))]
 public class GSensor : MonoBehaviour
 {
+    public List<MemData> TagsToSense = new();
+
     public float sensorRadius = 10f;
     public LayerMask sensorLayerMask;
     public float timeBetweenChecks = 0.1f;
+    float closeRadius;
+    [SerializeField] Transform pickupTransform;
+    [SerializeField] SmartObject pickedUpObject;
 
-    [SerializeField] Transform pickupHolder;
+    public Dictionary<string, GameObject> ObjMemory { get; private set; } = new();
 
-    public Memory memory;
+    readonly Dictionary<string, EState> senseTagsToStateDict = new();
 
     GAgent attachedAgent;
+
+    string pickedUpTag;
 
 
     private void Awake()
     {
         attachedAgent = GetComponent<GAgent>();
-        memory = new Memory();
+        foreach (MemData memData in TagsToSense)
+        {
+            senseTagsToStateDict.Add(memData.tag, memData.state);
+        }
+        closeRadius = sensorRadius / 2f;
+
     }
 
     private void Start()
@@ -49,7 +61,7 @@ public class GSensor : MonoBehaviour
             foreach (Collider collider in colliders)
             {
                 GameObject obj = collider.attachedRigidbody ? collider.attachedRigidbody.gameObject : collider.gameObject;
-                if (!Physics.Raycast(transform.position, obj.transform.position, out RaycastHit hit, sensorRadius))
+                if (obj && senseTagsToStateDict.ContainsKey(obj.tag) /*&& !Physics.Raycast(transform.position, obj.transform.position, sensorRadius)*/)
                 {
                     sensedObjects.Add(obj);
                 }
@@ -60,11 +72,33 @@ public class GSensor : MonoBehaviour
             {
                 CheckObject(obj);
             }
-
-            if (memory.objMemory.ContainsKey("Player") && !sensedObjects.Contains(memory.objMemory["Player"]))
+            foreach (KeyValuePair<string, GameObject> kvp in ObjMemory.ToArray())
             {
-                memory.objMemory.Remove("Player");
-                attachedAgent.agentBeliefs.SetState(EState.SeesPlayer, 0);
+                if (!kvp.Value)
+                {
+                    RemoveTagFromMemory(kvp.Key);
+                }
+                else if (kvp.Key == "Player" )
+                {
+
+                    if (!sensedObjects.Contains(kvp.Value))
+                    {
+                        RemoveObjFromMemory(kvp.Value);
+                        attachedAgent.agentBeliefs.SetState(EState.PlayerIsClose, 0);
+                    }
+                    else if (Vector3.Distance(kvp.Value.transform.position, transform.position) < closeRadius)
+                    {
+                        attachedAgent.agentBeliefs.SetState(EState.PlayerIsClose, 1);
+                    }
+                    else
+                    {
+                        attachedAgent.agentBeliefs.SetState(EState.PlayerIsClose, 0);
+                    }
+                }
+                //else if (!sensedObjects.Contains(kvp.Value))
+                //{
+                //    RemoveObjFromMemory(kvp.Value);
+                //}
             }
 
             yield return new WaitForSeconds(timeBetweenChecks);
@@ -73,32 +107,87 @@ public class GSensor : MonoBehaviour
 
     public bool CheckObject(GameObject obj, string trueIfTag = null)
     {
-        if (obj.CompareTag("Tree"))
+        if (obj && senseTagsToStateDict.TryGetValue(obj.tag, out EState state))
         {
-            memory.objMemory[obj.tag] = obj;
-            attachedAgent.agentBeliefs.SetState(EState.SeenTree, 1);
+            if (ObjMemory.ContainsKey(obj.tag) && ObjMemory[obj.tag] && ObjMemory[obj.tag] != obj)
+            {
+                if (Vector3.SqrMagnitude(transform.position - obj.transform.position) < Vector3.SqrMagnitude(transform.position - ObjMemory[obj.tag].transform.position))
+                {
+                    ObjMemory[obj.tag] = obj;
+                }
+            }
+            else
+            {
+                ObjMemory[obj.tag] = obj;
+                attachedAgent.agentBeliefs.SetState(state, 1);
+            }
         }
-        else if (obj.CompareTag("Player"))
-        {
-
-            memory.objMemory[obj.tag] = obj;
-            attachedAgent.agentBeliefs.SetState(EState.SeesPlayer, 1);
-
-        }
-        else if (obj.CompareTag("Wood"))
-        {
-            memory.objMemory[obj.tag] = obj;
-            attachedAgent.agentBeliefs.SetState(EState.SeesWood, 1);
-        }
-
-        return trueIfTag == null ? true : obj.CompareTag(trueIfTag);
+        return trueIfTag == null || obj.CompareTag(trueIfTag);
     }
 
     public void RemoveObjFromMemory(GameObject obj)
     {
-        if (memory.objMemory.ContainsKey(obj.tag) && memory.objMemory[obj.tag] == obj)
+        if (ObjMemory.ContainsKey(obj.tag) && ObjMemory[obj.tag] == obj)
         {
-            memory.objMemory.Remove(obj.tag);
+            ObjMemory.Remove(obj.tag);
+            attachedAgent.agentBeliefs.SetState(senseTagsToStateDict[obj.tag], 0);
         }
+    }
+
+    public void RemoveTagFromMemory(string tag)
+    {
+        ObjMemory.Remove(tag);
+        attachedAgent.agentBeliefs.SetState(senseTagsToStateDict[tag], 0);
+    }
+
+    public bool TryGetObjectOfTag(string tag, out GameObject value)
+    {
+        if (ObjMemory.TryGetValue(tag, out value))
+        {
+            if (value) return true;
+
+            ObjMemory.Remove(tag);
+        }
+        return false;
+    }
+
+    public void PickUp(SmartObject pickup)
+    {
+        if (pickup)
+        {
+            DropPickup();
+            attachedAgent.agentBeliefs.SetState(pickup.stateToAffect, 1);
+            pickedUpTag = pickup.tag;
+            pickedUpObject = pickup;
+            pickedUpObject.transform.position = pickupTransform.position;
+            pickedUpObject.transform.rotation = pickupTransform.rotation;
+            pickedUpObject.transform.parent = pickupTransform;
+        }
+    }
+
+    public void DropPickup()
+    {
+        if (pickedUpObject)
+        {
+            attachedAgent.agentBeliefs.SetState(pickedUpObject.stateToAffect, 1);
+            pickedUpObject.Drop();
+            pickedUpObject = null;
+            pickedUpTag = null;
+        }
+    }
+
+    public void UsePickup(Vector3 at)
+    {
+        if (pickedUpObject)
+        {
+            transform.LookAt(at);
+            pickedUpObject.UsePickedup(at);
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.gray;
+        Gizmos.DrawWireSphere(transform.position, sensorRadius);
     }
 }
