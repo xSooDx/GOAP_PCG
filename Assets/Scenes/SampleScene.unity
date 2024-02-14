@@ -1614,10 +1614,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5803457593518937292, guid: 7977eb66b530461449df2d1185485b96, type: 3}
-      propertyPath: fleeDistance
-      value: 6
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
