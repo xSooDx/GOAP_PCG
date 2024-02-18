@@ -6,7 +6,10 @@ using UnityEngine;
 public class Tree : MonoBehaviour
 {
     [SerializeField] GameObject woodPrefab;
+    [SerializeField] int minDrops = 2, maxDrops = 5;
+    [SerializeField] float dropRadius = 1f;
     HealthComponent hc;
+    
 
     private void Awake()
     {
@@ -17,6 +20,12 @@ public class Tree : MonoBehaviour
     public void OnDeath()
     {
         Destroy(gameObject);
-        Instantiate(woodPrefab, transform.position, transform.rotation);
+        int drops = Random.Range(minDrops, maxDrops);
+        for (int i = 0; i < drops; i++)
+        {
+            Vector3 offset = Random.insideUnitSphere * dropRadius ;
+            offset.y = transform.position.y;
+            Instantiate(woodPrefab, transform.position + offset, transform.rotation);
+        }
     }
 }

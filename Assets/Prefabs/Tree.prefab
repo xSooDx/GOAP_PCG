@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 5592053792145888112}
   - component: {fileID: 8485372729414805442}
   - component: {fileID: 5907590363295865832}
-  - component: {fileID: 4448643766579670}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,27 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4448643766579670
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2989707694133876441}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8782084884088524996
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,7 +95,7 @@ GameObject:
   - component: {fileID: 1045351838273816604}
   - component: {fileID: 1096691565708442806}
   - component: {fileID: 4762419988945472117}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,10 +186,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
+  m_Radius: 1
+  m_Height: 3
   m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0.000000059604645, y: 0.29, z: -0.00000008940697}
 --- !u!1 &8934540787123325725
 GameObject:
   m_ObjectHideFlags: 0
@@ -224,7 +202,8 @@ GameObject:
   - component: {fileID: 2873109247662834648}
   - component: {fileID: 6911690547842050396}
   - component: {fileID: 1602277267160908096}
-  m_Layer: 7
+  - component: {fileID: 789590313137558773}
+  m_Layer: 8
   m_Name: Tree
   m_TagString: Tree
   m_Icon: {fileID: 0}
@@ -246,7 +225,7 @@ Transform:
   - {fileID: 8626267361171851905}
   - {fileID: 5592053792145888112}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 75
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &2873109247662834648
 Rigidbody:
@@ -287,8 +266,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 483a03e6b162f9a4d8186575ef2dccfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPickedUp: 0
   woodPrefab: {fileID: 5427793815158858983, guid: cdbca09cb9b976d45953a535a5af4a70, type: 3}
+  minDrops: 1
+  maxDrops: 3
+  dropRadius: 1
 --- !u!114 &1602277267160908096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,6 +282,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 333dfd88d2f4f2c4ba679ff536841dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 100
-  maxHealth: 100
+  startingHealth: 120
+  maxHealth: 120
   currentHealth: 0
+--- !u!208 &789590313137558773
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8934540787123325725}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

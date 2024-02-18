@@ -26,6 +26,11 @@ public class Axe : SmartObject
             gameObject.LeanRotateAroundLocal(Vector3.right, 120f, .05f).setOnComplete(
                 () =>
                 {
+                    Collider[] cs = Physics.OverlapSphere(owner.transform.position + owner.transform.forward, 1f);
+                    foreach (Collider c in cs)
+                    {
+                        OnHt(c);
+                    }
                     gameObject.LeanRotateAroundLocal(Vector3.right, -120f, .2f).setOnComplete(
                         () =>
                         {
@@ -38,7 +43,7 @@ public class Axe : SmartObject
         return false;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnHt(Collider other)
     {
         if (isPickedUp && isAttacking
             && other.attachedRigidbody && other.attachedRigidbody.gameObject != owner
@@ -53,5 +58,10 @@ public class Axe : SmartObject
                 hc.TakeDamage(damage);
             }
         }
+    }
+    private void OnDrawGizmos()
+    {
+        if(owner)
+        Gizmos.DrawSphere(owner.transform.position + owner.transform.forward, 1);
     }
 }

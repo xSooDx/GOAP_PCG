@@ -10,12 +10,12 @@ public class PickupAction : GAction
         {
             return base.GetCost() + (Vector3.Distance(target.transform.position, transform.position)) / 5f;
         }
-        return base.GetCost();
+        return base.GetCost() + gAgentRef.sensor.sensorRadius / 5f;
     }
 
     public override string GetName()
     {
-        return "Pickup Action: " + targetTag;
+        return "Pick up " + targetTag;
     }
 
     public override bool PostPerform()
@@ -37,12 +37,7 @@ public class PickupAction : GAction
 
     private void Update()
     {
-        if (!target)
-        {
-            StopAction(true);
-            return;
-        }
-        if (navAgent.ReachedNavDestination(1f))
+        NavigationUpdate(() =>
         {
             target.GetComponent<SmartObject>().Interact(out SmartObject pickup, gameObject);
             if (pickup)
@@ -50,6 +45,6 @@ public class PickupAction : GAction
                 gAgentRef.sensor.PickUp(pickup);
                 StopAction();
             }
-        }
+        });
     }
 }

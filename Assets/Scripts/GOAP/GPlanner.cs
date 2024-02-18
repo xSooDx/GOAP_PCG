@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class GPlanNode
@@ -25,6 +24,7 @@ public class GPlanner
 {
     public Queue<GAction> MakePlane(List<GAction> actions, GGoal goal, GWorldStates startingState)
     {
+        
         List<GAction> useableActions = new List<GAction>(actions.Count);
         foreach (GAction action in actions)
         {
@@ -37,6 +37,8 @@ public class GPlanner
         List<GPlanNode> leaves = new List<GPlanNode>();
         GPlanNode start = new GPlanNode(null, 0, startingState, null);
 
+        //BuildGraph_v2(start, leaves, useableActions, goal);
+        //return null;
         bool succss = BuildGraph(start, leaves, useableActions, goal.goalStates);
 
         if (!succss)
@@ -126,6 +128,28 @@ public class GPlanner
 
         return foundPath;
     }
+
+    //GPlanNode BuildGraph_v2(GPlanNode parent, List<GPlanNode> leaves, List<GAction> usableActions, GWorldStates goal)
+    //{
+    //    bool foundPath = false;
+    //    GPlanNode returnNode = null;
+    //    Queue<GPlanNode> actionsToTest = new();
+    //    foreach(var action in usableActions)
+    //    {
+    //        if(action.afterEffects.DoesSatisfyWorldState(goal))
+    //        {
+    //            GPlanNode node = new GPlanNode(null, parent.cost + action.GetCost(), action.preConditions, action);
+    //            actionsToTest.Enqueue(node);
+    //            if (returnNode == null) returnNode = node;
+    //        }
+    //    }
+    //    while(actionsToTest.Count > 0)
+    //    {
+    //        GPlanNode testingAction = actionsToTest.Dequeue();
+    //        = BuildGraph_v2(parent, leaves, ActionSubset(usableActions, testingAction.action), testingAction.state);
+    //    }
+    //    return returnNode;
+    //}
 
     private List<GAction> ActionSubset(List<GAction> usableActions, GAction removeMe)
     {

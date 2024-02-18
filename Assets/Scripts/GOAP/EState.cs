@@ -25,4 +25,11 @@ public enum EState
 
     PlayerIsClose,
     KilledPlayer,
+
+    CollectWood,
+
+    NearWorker,
+    Gaurd,
+    SeesWorker,
+
 }

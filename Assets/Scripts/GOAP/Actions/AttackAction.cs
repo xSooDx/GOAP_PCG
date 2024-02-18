@@ -1,23 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AttackAction : GAction
 {
-    public float AttackRange = 1.5f;
-
     public override float GetCost()
     {
         if (gAgentRef.sensor.TryGetObjectOfTag(targetTag, out GameObject target))
         {
-            return base.GetCost() + (Vector3.Distance(target.transform.position, transform.position) - AttackRange) / 5f;
+            return base.GetCost() + (Vector3.Distance(target.transform.position, transform.position) - Range) / 5f;
         }
         return base.GetCost();
     }
 
     public override string GetName()
     {
-        return "Attack Action: " + targetTag;
+        return "Attack " + targetTag;
     }
 
     public override bool PostPerform()
@@ -45,7 +44,7 @@ public class AttackAction : GAction
     // Update is called once per frame
     void Update()
     {
-        if (navAgent.ReachedNavDestination(AttackRange))
+        NavigationUpdate(() => 
         {
             if (target)
             {
@@ -56,7 +55,6 @@ public class AttackAction : GAction
             {
                 StopAction(true);
             }
-
-        }
+        });
     }
 }

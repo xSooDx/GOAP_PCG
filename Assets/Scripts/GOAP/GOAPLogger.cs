@@ -4,6 +4,7 @@ using UnityEditor;
 
 public class GOAPLogger : MonoBehaviour
 {
+#if UNITY_EDITOR
     public static GOAPLogger instance;
 
     //uint qsize = 15;  // number of messages to keep
@@ -65,4 +66,5 @@ public class GOAPLogger : MonoBehaviour
             GUILayout.EndArea();
         }
     }
+#endif
 }

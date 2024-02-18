@@ -7,7 +7,7 @@ public class FleeAction : GAction
     [SerializeField] float fleeDistance = 20f;
     public override string GetName()
     {
-        return "Flee Action " + targetTag;
+        return "Flee " + targetTag;
     }
 
     public override bool PostPerform()

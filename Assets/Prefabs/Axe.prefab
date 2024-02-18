@@ -35,7 +35,7 @@ Transform:
   - {fileID: 3697215194611514988}
   - {fileID: 33387351270246378}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 161
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &4274472451629840681
 Rigidbody:
@@ -62,7 +62,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!65 &5896451187460137146
 BoxCollider:
@@ -99,6 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPickedUp: 0
   stateToAffect: 12
+  owner: {fileID: 0}
   damage: 5
 --- !u!1 &6610221484357971711
 GameObject:
@@ -114,7 +115,7 @@ GameObject:
   - component: {fileID: 5235517963724886141}
   m_Layer: 7
   m_Name: Cube
-  m_TagString: Sword
+  m_TagString: Axe
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -219,7 +220,7 @@ GameObject:
   - component: {fileID: 3137325050279229272}
   m_Layer: 7
   m_Name: Cube (1)
-  m_TagString: Sword
+  m_TagString: Axe
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -324,7 +325,7 @@ GameObject:
   - component: {fileID: 2679160726766215428}
   m_Layer: 7
   m_Name: Cube (2)
-  m_TagString: Sword
+  m_TagString: Axe
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

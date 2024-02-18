@@ -11,7 +11,7 @@ public abstract class SmartObject : MonoBehaviour
     Rigidbody rb;
     public GameObject owner;
 
-    string cachedTag;
+    public string cachedTag { get; private set; }
 
     private void Awake()
     {
@@ -44,11 +44,13 @@ public abstract class SmartObject : MonoBehaviour
     {
         if (isPickedUp)
         {
-            isPickedUp = false;
-            transform.parent = null;
-            transform.position = transform.position + transform.forward;
-            tag = cachedTag;
-            owner = null;
+            SmartObject dropped = Instantiate(this.gameObject).GetComponent<SmartObject>();
+            dropped.isPickedUp = false;
+            dropped.transform.parent = null;
+            dropped.transform.position = transform.position + transform.forward;
+            dropped.tag = cachedTag;
+            dropped.owner = null;
+            Destroy(this.gameObject);
             return true;
         }
         return false;

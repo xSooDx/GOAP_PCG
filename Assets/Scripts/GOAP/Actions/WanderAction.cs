@@ -17,7 +17,7 @@ public class WanderAction : GAction
 
     public override string GetName()
     {
-        return "Wander Action";
+        return "Wander";
     }
 
     public override bool PrePerform()

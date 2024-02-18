@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [System.Serializable]
 public struct MemData
 {
-    public string tag;
     [TagSelector]
+    public string tag;
+
     public EState state;
 }
 
@@ -21,7 +23,9 @@ public class GSensor : MonoBehaviour
 
     public float sensorRadius = 10f;
     public LayerMask sensorLayerMask;
+    public LayerMask obstacleMask;
     public float timeBetweenChecks = 0.1f;
+    //public float visionConeHalfRadius = 60f;
     float closeRadius;
     [SerializeField] Transform pickupTransform;
     [SerializeField] SmartObject pickedUpObject;
@@ -34,6 +38,13 @@ public class GSensor : MonoBehaviour
 
     string pickedUpTag;
 
+    public bool HasPickup
+    {
+        get
+        {
+            return pickedUpObject != null;
+        }
+    }
 
     private void Awake()
     {
@@ -61,7 +72,12 @@ public class GSensor : MonoBehaviour
             foreach (Collider collider in colliders)
             {
                 GameObject obj = collider.attachedRigidbody ? collider.attachedRigidbody.gameObject : collider.gameObject;
-                if (obj && senseTagsToStateDict.ContainsKey(obj.tag) /*&& !Physics.Raycast(transform.position, obj.transform.position, sensorRadius)*/)
+                if (obj && senseTagsToStateDict.ContainsKey(obj.tag) 
+                    && (!Physics.Raycast(transform.position, obj.transform.position, out RaycastHit rayHit, sensorRadius, obstacleMask) || (rayHit.rigidbody && rayHit.rigidbody.gameObject == obj)))
+                {
+                    sensedObjects.Add(obj);
+                }
+                else if (obj && obj.CompareTag("Player") && ObjMemory.ContainsKey("Player"))
                 {
                     sensedObjects.Add(obj);
                 }
@@ -78,7 +94,7 @@ public class GSensor : MonoBehaviour
                 {
                     RemoveTagFromMemory(kvp.Key);
                 }
-                else if (kvp.Key == "Player" )
+                else if (kvp.Key == "Player")
                 {
 
                     if (!sensedObjects.Contains(kvp.Value))
@@ -169,7 +185,7 @@ public class GSensor : MonoBehaviour
     {
         if (pickedUpObject)
         {
-            attachedAgent.agentBeliefs.SetState(pickedUpObject.stateToAffect, 1);
+            attachedAgent.agentBeliefs.SetState(pickedUpObject.stateToAffect, 0);
             pickedUpObject.Drop();
             pickedUpObject = null;
             pickedUpTag = null;
@@ -189,5 +205,9 @@ public class GSensor : MonoBehaviour
     {
         Gizmos.color = Color.gray;
         Gizmos.DrawWireSphere(transform.position, sensorRadius);
+        //Vector3 p1 = Quaternion.AngleAxis(-visionConeHalfRadius, Vector3.up) * transform.forward;
+        //Vector3 p2 = Quaternion.AngleAxis(visionConeHalfRadius, Vector3.up) * transform.forward;
+        //Gizmos.DrawLine(transform.position, transform.position + p1 * sensorRadius);
+        //Gizmos.DrawLine(transform.position, transform.position + p2 * sensorRadius);
     }
 }

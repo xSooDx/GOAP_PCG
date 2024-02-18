@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -47,6 +48,7 @@ public class GAgent : MonoBehaviour
     [SerializeField] List<GAction> actions;
 
     [SerializeField] List<GGoal> goals;
+    public TextMeshProUGUI actionText;
 
     GPlanner planner;
 
@@ -56,6 +58,10 @@ public class GAgent : MonoBehaviour
 
     GAction currentAction;
     HealthComponent healthComponent;
+    NavMeshAgent navAgent;
+    Rigidbody rb;
+    bool isDead = false;
+
 
     public GSensor sensor { get; private set; }
 
@@ -78,7 +84,7 @@ public class GAgent : MonoBehaviour
     {
         get
         {
-            if(actionQueue == null)
+            if (actionQueue == null)
             {
                 return new string[] { "No Actions Planned" };
             }
@@ -103,13 +109,14 @@ public class GAgent : MonoBehaviour
     public string[] CurrentBeliefs
     {
         get
-        {   if(agentBeliefs == null)
+        {
+            if (agentBeliefs == null)
             {
                 return new string[] { "" };
             }
             string[] ret = new string[agentBeliefs.WorldStates.Count];
             int i = 0;
-            foreach(KeyValuePair<EState, int> state in agentBeliefs.WorldStates)
+            foreach (KeyValuePair<EState, int> state in agentBeliefs.WorldStates)
             {
                 ret[i] = $"{state.Key} : {state.Value}";
                 i++;
@@ -134,6 +141,8 @@ public class GAgent : MonoBehaviour
             item.Init();
         }
         sensor = GetComponent<GSensor>();
+        navAgent = GetComponent<NavMeshAgent>();
+        rb = GetComponent<Rigidbody>();
         planner = new GPlanner();
         currentGoalIndex = -1;
         healthComponent = GetComponent<HealthComponent>();
@@ -143,6 +152,7 @@ public class GAgent : MonoBehaviour
 
     void Start()
     {
+        UIManager.Instance.RegisterEnemy();
         StartCoroutine(PlanCheck());
     }
 
@@ -154,6 +164,7 @@ public class GAgent : MonoBehaviour
 
     IEnumerator PlanCheck()
     {
+        yield return new WaitForSeconds(timeBetweenPlanning);
         while (true)
         {
             if (actionQueue == null)
@@ -194,6 +205,7 @@ public class GAgent : MonoBehaviour
         {
             currentAction = actionQueue.Dequeue();
             currentAction.StartAction();
+            actionText.text = "Goal: " + goals[currentGoalIndex].goalName + "\n -> " + currentAction.GetName();
             yield return new WaitUntil(() => currentAction.enabled == false);
             if (currentAction.WasSuccess == false)
             {
@@ -201,15 +213,34 @@ public class GAgent : MonoBehaviour
                 break;
             }
         }
+        ClearActions();
+    }
+
+    private void ClearActions()
+    {
+        currentAction?.StopAction(true);
         currentAction = null;
         currentGoalIndex = -1;
-        actionQueue.Clear();
+        actionQueue?.Clear();
         actionQueue = null;
     }
 
     void OnDeath()
     {
-        Destroy(gameObject);
+        sensor.DropPickup();
+        StopAllCoroutines();
+        ClearActions();
+        //navAgent.isStopped = true;
+        navAgent.enabled = false;
+        rb.constraints = RigidbodyConstraints.None;
+        rb.AddForce(Vector3.up * 3f, ForceMode.Impulse);
+
+        if (!isDead)
+        {
+            UIManager.Instance?.EnemeyDead();
+            isDead = true;
+        }
+        Destroy(gameObject, 1f);
     }
 
     private void OnDamage(float currentHealth, float damage)
