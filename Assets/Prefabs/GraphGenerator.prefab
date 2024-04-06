@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &703573283262505404
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8633516277621552699}
+  - component: {fileID: 7431721590320760841}
+  m_Layer: 0
+  m_Name: GraphGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8633516277621552699
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 703573283262505404}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -42.73, y: 0, z: -42.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7431721590320760841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 703573283262505404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5958f72f08199104d9e7c4900481e846, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  generatorSettings:
+    baseAngle: 45
+    levelMinLength: 2
+    levelMaxLength: 5
+    minAngle: 20
+    maxAngle: 40
+    roomMinSize: 6
+    roomMaxSize: 12
+    connectorMinLength: 20
+    connectorMaxLength: 25
+    branchingFactor: 1
+    branchRoomMinSize: 4
+    branchRoomMaxSize: 8
+    branchMinLength: 8
+    branchMaxLength: 12
+  GenerateLevelButton: 0
+  CallGeneratorListenersButton: 0
+  CreateRandomSeed: 1
+  currentSeed: 1208089864
+  OnLevelGraphGenerated:
+    m_PersistentCalls:
+      m_Calls: []

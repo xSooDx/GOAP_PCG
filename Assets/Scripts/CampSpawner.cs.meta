@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 35efcc4b30b9ec14799ca0e5fb14c46b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - CampPrefab: {fileID: 2145960568439880020, guid: 3256e4ccc48019c428fbbf57c1b130bd, type: 3}
+  - SoldierPrefab: {fileID: 7055194192596210935, guid: 41af55d3416ab1b4a8b2619a34016087, type: 3}
+  - WorkerPrefab: {fileID: 2293410850386830439, guid: 57c397785900bff4eb7db3624f76f889, type: 3}
+  - axePrefab: {fileID: 5655559399743845093, guid: 0ea4278ede809f84ab4cbc877f646523, type: 3}
+  - SwordPrefab: {fileID: 7055194192596210935, guid: 41af55d3416ab1b4a8b2619a34016087, type: 3}
+  - BowPrefab: {fileID: 2797714252305482549, guid: 76f591deb6b72aa4dba1226d814adf1a, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

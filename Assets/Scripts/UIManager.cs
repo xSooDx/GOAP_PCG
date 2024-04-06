@@ -18,12 +18,13 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI enemyCount;
     public GameObject EndGameScreen;
     public TextMeshProUGUI endGameText;
+    public int WoodCountToWin = 100;
 
     public void AddWood()
     {
         WoodCount++;
-        enemyWoodText.text = "Enemy Wood: " + WoodCount + "/50";
-        if(WoodCount >= 50)
+        enemyWoodText.text = "Enemy Wood: " + WoodCount + "/" + WoodCountToWin;
+        if(WoodCount >= WoodCountToWin)
         {
             EndGame(false);
         }
