@@ -106,8 +106,6 @@ MonoBehaviour:
     m_Bits: 713
   pickedUpObject: {fileID: 0}
   pickupTransfrom: {fileID: 283392493417533978}
-  rockPrefab: {fileID: 0}
-  rockTrower: {fileID: 0}
 --- !u!114 &8304686424236722562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,7 +183,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e4e23eb8ec1b3c449bf23e4fafb02a1a, type: 2}
+  - {fileID: 2100000, guid: e0f9cb60219c024489dcafaeb413d216, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

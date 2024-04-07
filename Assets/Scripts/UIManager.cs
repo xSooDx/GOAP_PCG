@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,6 +16,7 @@ public class UIManager : MonoBehaviour
     public GameObject EndGameScreen;
     public TextMeshProUGUI endGameText;
     public int WoodCountToWin = 100;
+    public LevelGenerator LevelGenerator;
 
     public void AddWood()
     {
@@ -59,6 +57,8 @@ public class UIManager : MonoBehaviour
         EnemiesAlive = 0;
         WoodCount++;
         Time.timeScale = 1f;
+        LevelGenerator.GenerateLevelWithSeed(System.DateTime.Now.Millisecond);
+        LevelGenerator.CallGeneratorListeners();
         EndGameScreen.SetActive(false);
     }
 
@@ -80,5 +80,11 @@ public class UIManager : MonoBehaviour
         {
             Application.Quit();
         }
+    }
+
+    public void SubmitFeedback(bool like)
+    {
+        Debug.Log("Feedback: " + like);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
