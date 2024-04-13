@@ -142,6 +142,7 @@ public class GAgent : MonoBehaviour
         }
         sensor = GetComponent<GSensor>();
         navAgent = GetComponent<NavMeshAgent>();
+        navAgent.enabled = false;
         rb = GetComponent<Rigidbody>();
         planner = new GPlanner();
         currentGoalIndex = -1;
@@ -153,6 +154,7 @@ public class GAgent : MonoBehaviour
     void Start()
     {
         UIManager.Instance.RegisterEnemy();
+        navAgent.enabled = true;
         StartCoroutine(PlanCheck());
     }
 

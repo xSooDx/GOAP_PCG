@@ -45,7 +45,7 @@ public class LevelGenerator : MonoBehaviour
             LevelGenNode newNode = CreateNewLevelGenNode(currentNode);
             newNode.roomSize = GenerateRoomSize();
 
-            float angle = GenerateRoomAngleOffset();
+            float angle = GenerateRoomAngleOffset((i + seed & 1) % 2 == 0);
             newNode.angle = angle;
             newNode.center = GenerateNewNodeLocation(currentNode, newNode.roomSize, angle);
 
@@ -74,10 +74,10 @@ public class LevelGenerator : MonoBehaviour
 
     private float GenerateRoomSize() => Random.Range(generatorSettings.roomMinSize, generatorSettings.roomMaxSize);
     private float GenerateBranchRoomSize() => Random.Range(generatorSettings.branchRoomMinSize, generatorSettings.branchRoomMaxSize);
-    private float GenerateRoomAngleOffset() =>(Random.Range(0, 2) == 0 ? 1 : -1) * Random.Range(generatorSettings.minAngle, generatorSettings.maxAngle) ;
+    private float GenerateRoomAngleOffset(bool neg) => (neg ? 1 : -1) * Random.Range(generatorSettings.minAngle, generatorSettings.maxAngle);
     private Vector3 GenerateNewNodeLocation(LevelGenNode parentNode, float currentRoomSize, float angle)
     {
-        Vector3 direction = Quaternion.AngleAxis(generatorSettings.baseAngle +  angle, Vector3.up) * Vector3.forward;
+        Vector3 direction = Quaternion.AngleAxis(generatorSettings.baseAngle + angle, Vector3.up) * Vector3.forward;
         return parentNode.center + (direction * (currentRoomSize + parentNode.roomSize + Random.Range(generatorSettings.connectorMinLength, generatorSettings.connectorMaxLength)));
     }
 
@@ -95,13 +95,14 @@ public class LevelGenerator : MonoBehaviour
         return newNode;
     }
 
-    
+
 
 #if UNITY_EDITOR
-    private void OnValidate()
-    {
-        GenerateLevelWithSeed(currentSeed);
-    }
+    //private void OnValidate()
+    //{
+    //    if (Application.isPlaying) return;
+    //    //GenerateLevelWithSeed(currentSeed);
+    //}
 
     private void OnDrawGizmosSelected()
     {

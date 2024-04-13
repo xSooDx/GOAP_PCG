@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4554221308156490011}
   - component: {fileID: 4653598944906127825}
   - component: {fileID: 859601851864131394}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4502243136160631167}
   - component: {fileID: 5264911287199686563}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 908486774750932985}
   - component: {fileID: 2917513553126693150}
   - component: {fileID: -5899250845449097975}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: ArrowProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -337,7 +337,7 @@ GameObject:
   - component: {fileID: 6591432812087906893}
   - component: {fileID: 740410669675855387}
   - component: {fileID: 4713882606450536585}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -420,7 +420,7 @@ GameObject:
   - component: {fileID: 4171502329772749585}
   - component: {fileID: 8119749145419092405}
   - component: {fileID: 7484569763305503886}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -26,7 +26,7 @@ public class GSensor : MonoBehaviour
     public LayerMask obstacleMask;
     public float timeBetweenChecks = 0.1f;
     //public float visionConeHalfRadius = 60f;
-    float closeRadius;
+    public float closeRadius = 5f;
     [SerializeField] Transform pickupTransform;
     [SerializeField] SmartObject pickedUpObject;
 
@@ -53,8 +53,6 @@ public class GSensor : MonoBehaviour
         {
             senseTagsToStateDict.Add(memData.tag, memData.state);
         }
-        closeRadius = sensorRadius / 2f;
-
     }
 
     private void Start()

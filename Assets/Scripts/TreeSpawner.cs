@@ -41,8 +41,6 @@ public class TreeSpawner : MonoBehaviour
                 t.parent = transform;
             }
         }
-
-        
     }
 
     private void OnDrawGizmos()

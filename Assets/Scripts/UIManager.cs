@@ -1,3 +1,4 @@
+using PCC.ContentRepresentation.Sample;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,6 +18,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI endGameText;
     public int WoodCountToWin = 100;
     public LevelGenerator LevelGenerator;
+    public CampSpawner CampSpawner;
 
     public void AddWood()
     {
@@ -56,15 +58,20 @@ public class UIManager : MonoBehaviour
         Instance = this;
         EnemiesAlive = 0;
         WoodCount++;
-        Time.timeScale = 1f;
-        LevelGenerator.GenerateLevelWithSeed(System.DateTime.Now.Millisecond);
-        LevelGenerator.CallGeneratorListeners();
-        EndGameScreen.SetActive(false);
+        Time.timeScale = 1f;        
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        Sample s = PCPCGManager.Instance.GetSample();
+        float bf = s.GetSampleValue(PCPCGManager.BRANCH_FEATURE).Item2.floatVal;
+        LevelGenerator.generatorSettings.branchingFactor = bf;
+        LevelGenerator.GenerateLevelWithSeed(System.DateTime.Now.Millisecond);
+        float ed = s.GetSampleValue(PCPCGManager.ENEMY_DENSITY_FEATURE).Item2.floatVal;
+        CampSpawner.EnemyDensity = ed;
+        EndGameScreen.SetActive(false);
+        LevelGenerator.CallGeneratorListeners();
         
     }
 
@@ -73,7 +80,7 @@ public class UIManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            EndGame(false);
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -84,7 +91,9 @@ public class UIManager : MonoBehaviour
 
     public void SubmitFeedback(bool like)
     {
+        
         Debug.Log("Feedback: " + like);
+        PCPCGManager.Instance.RecordSample(like);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
